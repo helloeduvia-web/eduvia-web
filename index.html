@@ -3,218 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Eduvia — Know Where You Fit Before You Apply</title>
-<meta name="description" content="Eduvia helps ambitious students discover best-fit study abroad universities, estimate budgets, and connect with an expert.">
-<style>
-:root{
-  --navy:#0b1220;--ink:#152033;--muted:#667085;--blue:#2457ff;--blue2:#4f7cff;
-  --line:#e8edf5;--soft:#f5f8ff;--card:#fff;--green:#11a36a;--gold:#f59e0b;
-  --shadow:0 24px 60px rgba(12,24,48,.10);--radius:24px
-}
-*{box-sizing:border-box} html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#fff}
-a{text-decoration:none;color:inherit}.container{max-width:1200px;margin:auto;padding:0 24px}
-.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);z-index:20}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px}.mark{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--blue),#7aa0ff);display:grid;place-items:center;color:#fff;box-shadow:0 8px 24px rgba(36,87,255,.25)}
-.navlinks{display:flex;gap:28px;color:#526079;font-size:14px}.navlinks a:hover{color:var(--ink)}
-.btn{border:0;border-radius:14px;padding:13px 18px;font-weight:800;cursor:pointer}.primary{background:var(--blue);color:#fff;box-shadow:0 12px 28px rgba(36,87,255,.20)}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
-.hero{padding:72px 0 64px;background:
-linear-gradient(180deg,#f7faff 0%,#fff 72%);overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:48px;align-items:center}
-.kicker{display:inline-flex;gap:9px;align-items:center;border:1px solid #dbe5ff;background:#eef3ff;color:#244ed4;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:900}
-h1{font-size:66px;line-height:1.02;letter-spacing:-.05em;margin:18px 0 18px;max-width:700px}
-.hero p{font-size:18px;line-height:1.72;color:var(--muted);max-width:690px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.microtrust{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px;color:#526079;font-size:13px}
-.hero-visual{position:relative;min-height:540px}
-.student{position:absolute;inset:24px 0 0 30px;border-radius:34px;background:
-linear-gradient(160deg,rgba(29,59,120,.08),rgba(255,255,255,.80)),
-url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1100&q=88") center/cover;
-box-shadow:var(--shadow);overflow:hidden}
-.student:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,18,38,.00) 40%,rgba(7,18,38,.45))}
-.float-card{position:absolute;background:rgba(255,255,255,.96);border:1px solid rgba(231,237,246,.95);border-radius:20px;box-shadow:var(--shadow);padding:17px}
-.score-card{right:-12px;top:52px;width:238px}.score-badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#eff4ff;color:#2547bc;font-size:11px;font-weight:900}.score{font-size:46px;font-weight:950;margin:9px 0}.score-row{display:flex;justify-content:space-between;font-size:12px;color:#58667d;margin-top:7px}.score-bar{height:7px;background:#e8edf5;border-radius:999px;margin-top:6px;overflow:hidden}.score-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:999px}
-.budget-card{left:0;bottom:26px;width:250px}.budget-label{font-size:11px;color:#65738b;font-weight:800}.budget-amount{font-size:26px;font-weight:950;margin-top:6px}.budget-sub{font-size:12px;color:#65738b;margin-top:4px}
-.countries{padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}.country-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.country-row span{padding:11px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:13px;font-weight:800;color:#49566d}
-section{padding:88px 0}.eyebrow{font-size:12px;color:#4662c8;font-weight:900;text-transform:uppercase;letter-spacing:.12em}.head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:34px}.head h2{font-size:42px;letter-spacing:-.04em;margin:7px 0 0}.head p{color:var(--muted);max-width:620px;line-height:1.7;margin:0}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.step{border:1px solid var(--line);border-radius:22px;padding:24px;background:#fff;box-shadow:0 10px 32px rgba(15,23,42,.035)}.num{width:38px;height:38px;border-radius:12px;background:#eef3ff;color:#244ed4;display:grid;place-items:center;font-weight:950;margin-bottom:18px}.step h3{margin:0 0 9px;font-size:18px}.step p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}
-.unis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.uni-card{border:1px solid var(--line);border-radius:22px;padding:18px;background:#fff;box-shadow:0 12px 32px rgba(15,23,42,.045)}.uni-top{display:flex;justify-content:space-between;gap:10px}.logo{width:44px;height:44px;border-radius:12px;background:#f4f6fb;display:grid;place-items:center;font-weight:950;color:#1a2540}.uni-tag{font-size:11px;padding:6px 8px;border-radius:999px;background:#f2f7ff;color:#2d4ed5;height:max-content;font-weight:900}.uni-card h3{font-size:17px;margin:16px 0 4px}.uni-meta{color:#6b778d;font-size:12px}.uni-line{margin-top:14px;display:flex;justify-content:space-between;font-size:12px;color:#59667c}.uni-line b{color:var(--ink)}
-.destinations{background:#0c1425;color:#fff}.dest-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.dest{border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:18px;background:rgba(255,255,255,.035)}.dest .flag{font-size:26px}.dest h3{margin:13px 0 5px}.dest p{margin:0;color:#aeb8ca;font-size:12px;line-height:1.55}.dest strong{display:block;margin-top:13px;color:#fff;font-size:13px}
-.report{border-radius:30px;background:#0e1728;color:#fff;padding:34px}.report-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}.report-panel{background:#fff;color:var(--ink);border-radius:22px;padding:22px}.report-score{display:flex;justify-content:space-between;align-items:start}.big{font-size:58px;font-weight:950;letter-spacing:-.05em}.good{padding:7px 10px;border-radius:999px;background:#e9fbf4;color:#137a51;font-size:11px;font-weight:950}.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}.metric{border:1px solid var(--line);border-radius:16px;padding:14px}.metric span{display:block;color:var(--muted);font-size:11px}.metric b{display:block;font-size:22px;margin-top:4px}.mix{margin-top:14px}.mix-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}.mix-row:last-child{border-bottom:0}
-.expert{border:1px solid #dbe5ff;background:linear-gradient(135deg,#eef4ff,#f8fbff);border-radius:30px;padding:38px}.expert-grid{display:grid;grid-template-columns:1fr auto;align-items:center;gap:30px}.expert h2{font-size:38px;letter-spacing:-.04em;margin:0 0 10px}.expert p{margin:0;color:var(--muted);max-width:720px;line-height:1.7}
-.faq{border-top:1px solid var(--line)}details{border-bottom:1px solid var(--line);padding:19px 0}summary{cursor:pointer;font-weight:800}details p{color:var(--muted);line-height:1.65;max-width:780px}
-footer{padding:36px 0;border-top:1px solid var(--line);color:#707b90;font-size:12px}.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-
-.modal{display:none;position:fixed;inset:0;background:rgba(7,14,27,.68);z-index:50;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:26px;padding:26px}.dialog-head{display:flex;justify-content:space-between;align-items:center}.close{width:38px;height:38px;border:0;border-radius:11px;background:#f1f4f9;cursor:pointer;font-size:20px}.progress{height:8px;background:#e9edf3;border-radius:999px;overflow:hidden;margin:16px 0 24px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));width:0}.q{font-size:25px;font-weight:900;margin-bottom:18px}.opts{display:grid;gap:10px}.opt{border:1px solid var(--line);border-radius:15px;padding:15px;text-align:left;background:#fff;font:inherit;cursor:pointer}.opt.sel,.opt:hover{border-color:#9bb4ff;background:#f0f4ff}.navline{display:flex;justify-content:space-between;gap:10px;margin-top:20px}.hidden{visibility:hidden}
-@media(max-width:1000px){h1{font-size:54px}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:500px}.steps{grid-template-columns:1fr 1fr}.unis{grid-template-columns:1fr 1fr}.dest-grid{grid-template-columns:1fr 1fr 1fr}.report-grid{grid-template-columns:1fr}}
-@media(max-width:700px){.navlinks{display:none}.container{padding:0 16px}h1{font-size:42px}.hero{padding-top:50px}.hero-visual{min-height:430px}.student{left:0}.score-card{right:0}.budget-card{left:0}.head,.expert-grid{display:block}.head h2{font-size:32px}.steps,.unis,.dest-grid,.metric-grid{grid-template-columns:1fr}.expert h2{font-size:32px}.expert .btn{margin-top:22px}}
-</style>
+<title>Eduvia — Student Portal</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="topbar">
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%">
-    <a class="brand" href="#top"><span class="mark">E</span>Eduvia</a>
-    <nav class="navlinks">
-      <a href="#how">How it works</a><a href="#universities">Universities</a><a href="#destinations">Destinations</a><a href="#report">Sample score</a><a href="#faq">FAQ</a>
-    </nav>
-    <button class="btn primary" data-start>Start assessment — ₹100</button>
-  </div>
+  <a class="brand" href="#"><img src="assets/eduvia-logo.png" alt="Eduvia"></a>
+  <nav>
+    <a class="active" href="#dashboard">Dashboard</a>
+    <a href="#destinations">Destinations</a>
+    <a href="#programs">Programs</a>
+    <a href="#intakes">Intakes</a>
+    <a href="#applications">Applications</a>
+    <a href="#support">Counselling</a>
+  </nav>
+  <div class="profile"><div class="avatar">R</div><div><b>Revathi</b><small>Student</small></div><span>⌄</span></div>
 </header>
 
-<main id="top">
+<main id="dashboard">
 <section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <span class="kicker">✦ Personalized study abroad assessment</span>
-      <h1>Know where you fit before you apply.</h1>
-      <p>Tell Eduvia about your academics, goals and budget. Get a personalized profile score, a smarter university shortlist and an estimated investment range — before you spend months guessing.</p>
-      <div class="hero-actions">
-        <button class="btn primary" data-start>Start assessment — ₹100</button>
-        <a class="btn ghost" href="#how">See how it works</a>
-      </div>
-      <div class="microtrust">
-        <span>✓ Profile-based matching</span><span>✓ Estimated budget</span><span>✓ Expert handoff</span>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="student"></div>
-      <div class="float-card score-card">
-        <span class="score-badge">Sample Eduvia Score</span>
-        <div class="score">84/100</div>
-        <div class="score-row"><span>Academic fit</span><b>92%</b></div><div class="score-bar"><i style="width:92%"></i></div>
-        <div class="score-row"><span>Budget match</span><b>78%</b></div><div class="score-bar"><i style="width:78%"></i></div>
-        <div class="score-row"><span>Course fit</span><b>88%</b></div><div class="score-bar"><i style="width:88%"></i></div>
-      </div>
-      <div class="float-card budget-card">
-        <div class="budget-label">Illustrative total investment</div>
-        <div class="budget-amount">₹28L – ₹34L</div>
-        <div class="budget-sub">Tuition + living estimate • USA MS</div>
-      </div>
-    </div>
+  <div class="hero-copy">
+    <span class="eyebrow">STUDENT PORTAL</span>
+    <h1>Your journey. <em>Your global future.</em></h1>
+    <p>Explore programs, compare destinations, understand your options and plan your study-abroad journey from India.</p>
+    <div class="actions"><a class="btn" href="#programs">Explore programs →</a><a class="btn ghost" href="#assessment">Start free assessment →</a></div>
+  </div>
+  <div class="hero-art">
+    <div class="sun"></div><div class="city c1"></div><div class="city c2"></div><div class="city c3"></div>
+    <div class="student">◯<br><span>▱</span></div>
   </div>
 </section>
 
-<div class="countries"><div class="container country-row">
-  <strong style="margin-right:4px;font-size:13px;color:#344054">Popular destinations</strong>
-  <span>🇺🇸 USA</span><span>🇨🇦 Canada</span><span>🇬🇧 UK</span><span>🇦🇺 Australia</span><span>🇩🇪 Germany</span>
-</div></div>
+<section class="stats">
+  <article><span>Profile readiness</span><strong>82%</strong><div class="bar"><i style="width:82%"></i></div></article>
+  <article><span>Shortlisted programs</span><strong>7</strong><small>Across 5 destinations</small></article>
+  <article><span>Upcoming intakes</span><strong>12</strong><small>All major study periods</small></article>
+  <article><span>Scholarships matched</span><strong>18</strong><small>Based on your profile</small></article>
+</section>
 
-<section id="how">
-  <div class="container">
-    <div class="head"><div><div class="eyebrow">How Eduvia works</div><h2>From confusion to a clear next step.</h2></div><p>A simple assessment-first journey built to give students useful clarity before the expert conversation.</p></div>
-    <div class="steps">
-      <div class="step"><div class="num">01</div><h3>Create your profile</h3><p>Share your education, test status, goals, budget and preferred destination.</p></div>
-      <div class="step"><div class="num">02</div><h3>Take the ₹100 assessment</h3><p>Complete a guided profile assessment in around 15–20 minutes.</p></div>
-      <div class="step"><div class="num">03</div><h3>Get your Eduvia Score</h3><p>See your profile strength, estimated budget and fit categories.</p></div>
-      <div class="step"><div class="num">04</div><h3>Talk to an expert</h3><p>Request a call when you want human guidance on your next move.</p></div>
-    </div>
+<section class="grid two">
+<article class="card" id="assessment">
+  <span class="eyebrow">FREE ASSESSMENT</span>
+  <h2>Understand what fits you — practically.</h2>
+  <p>No confusing score. Answer simple questions about your education, budget, interests, work goals, preferred countries and learning style.</p>
+  <div class="chips"><span>Education</span><span>Budget</span><span>Career goals</span><span>Study style</span><span>Country preference</span></div>
+  <a class="textbtn" href="#">Start 2-minute assessment →</a>
+</article>
+<article class="card roadmap">
+  <span class="eyebrow">YOUR STUDY ROADMAP</span>
+  <h2>One clear next step at a time.</h2>
+  <ol>
+    <li class="done"><b>1</b> Profile & practical assessment <span>Done</span></li>
+    <li class="current"><b>2</b> Shortlist programs <span>Now</span></li>
+    <li><b>3</b> Tests & document readiness <span>Next</span></li>
+    <li><b>4</b> Applications & offers <span>Later</span></li>
+    <li><b>5</b> Visa & pre-departure <span>Later</span></li>
+  </ol>
+</article>
+</section>
+
+<section id="destinations">
+  <div class="section-head"><div><span class="eyebrow">GLOBAL OPTIONS</span><h2>Study destinations from India</h2></div><a class="textbtn" href="#">View all →</a></div>
+  <div class="dest-grid">
+    <article class="destination usa"><b>USA</b><span>Universities · STEM · Business</span></article>
+    <article class="destination canada"><b>Canada</b><span>PG programs · Co-op · Research</span></article>
+    <article class="destination uk"><b>UK</b><span>Master's · One-year degrees</span></article>
+    <article class="destination australia"><b>Australia</b><span>Engineering · Health · IT</span></article>
+    <article class="destination germany"><b>Germany</b><span>Public universities · Engineering</span></article>
+    <article class="destination ireland"><b>Ireland</b><span>Tech · Business · Life sciences</span></article>
   </div>
 </section>
 
-<section id="universities" style="background:#fafcff">
-  <div class="container">
-    <div class="head"><div><div class="eyebrow">University discovery</div><h2>Explore universities by fit.</h2></div><p>Clean, profile-led cards designed to make comparison feel simple.</p></div>
-    <div class="unis">
-      <div class="uni-card"><div class="uni-top"><div class="logo">MIT</div><span class="uni-tag">Ambitious</span></div><h3>Massachusetts Institute of Technology</h3><div class="uni-meta">Cambridge, Massachusetts • USA</div><div class="uni-line"><span>Popular field</span><b>CS / AI</b></div><div class="uni-line"><span>Fit logic</span><b>Profile dependent</b></div></div>
-      <div class="uni-card"><div class="uni-top"><div class="logo">SU</div><span class="uni-tag">Ambitious</span></div><h3>Stanford University</h3><div class="uni-meta">Stanford, California • USA</div><div class="uni-line"><span>Popular field</span><b>CS / Data</b></div><div class="uni-line"><span>Fit logic</span><b>Profile dependent</b></div></div>
-      <div class="uni-card"><div class="uni-top"><div class="logo">ASU</div><span class="uni-tag">Target</span></div><h3>Arizona State University</h3><div class="uni-meta">Tempe, Arizona • USA</div><div class="uni-line"><span>Popular field</span><b>Engineering</b></div><div class="uni-line"><span>Fit logic</span><b>Profile dependent</b></div></div>
-      <div class="uni-card"><div class="uni-top"><div class="logo">PU</div><span class="uni-tag">Target</span></div><h3>Purdue University</h3><div class="uni-meta">West Lafayette, Indiana • USA</div><div class="uni-line"><span>Popular field</span><b>STEM</b></div><div class="uni-line"><span>Fit logic</span><b>Profile dependent</b></div></div>
-    </div>
+<section id="programs">
+  <div class="section-head"><div><span class="eyebrow">PROGRAM EXPLORER</span><h2>More than the usual courses</h2></div><a class="textbtn" href="#">Explore all →</a></div>
+  <div class="course-grid">
+    <article><b>AI & Machine Learning</b><small>Computer science · Intelligent systems</small></article>
+    <article><b>Cybersecurity</b><small>Security engineering · Digital forensics</small></article>
+    <article><b>Business Analytics</b><small>Decision science · Data-driven strategy</small></article>
+    <article><b>FinTech</b><small>Finance · Technology · Risk</small></article>
+    <article><b>Robotics & Automation</b><small>Mechatronics · Autonomous systems</small></article>
+    <article><b>Biotechnology</b><small>Genomics · Bioinformatics · Life sciences</small></article>
+    <article><b>Health Informatics</b><small>Healthcare · Data · Digital health</small></article>
+    <article><b>Renewable Energy</b><small>Clean energy · Sustainability · Power</small></article>
+    <article><b>UX / Human-Computer Interaction</b><small>Design · Research · Product</small></article>
+    <article><b>Supply Chain Analytics</b><small>Logistics · Operations · AI</small></article>
+    <article><b>Game Development</b><small>Interactive media · 3D · Simulation</small></article>
+    <article><b>Food Science & Nutrition</b><small>Food technology · Public health</small></article>
   </div>
 </section>
 
-<section id="destinations" class="destinations">
-  <div class="container">
-    <div class="head"><div><div class="eyebrow" style="color:#9bb4ff">Study destinations</div><h2>Pick a direction. We help you assess the fit.</h2></div><p style="color:#aeb8ca">Use destinations as a starting point; your final matches depend on your profile, goals, budget and current rules.</p></div>
-    <div class="dest-grid">
-      <div class="dest"><div class="flag">🇺🇸</div><h3>USA</h3><p>MS, MBA, Data, Engineering</p><strong>Profile-led matching</strong></div>
-      <div class="dest"><div class="flag">🇨🇦</div><h3>Canada</h3><p>PG, Analytics, Business</p><strong>Profile-led matching</strong></div>
-      <div class="dest"><div class="flag">🇬🇧</div><h3>UK</h3><p>Masters, Finance, Tech</p><strong>Profile-led matching</strong></div>
-      <div class="dest"><div class="flag">🇦🇺</div><h3>Australia</h3><p>IT, Engineering, Business</p><strong>Profile-led matching</strong></div>
-      <div class="dest"><div class="flag">🇩🇪</div><h3>Germany</h3><p>Engineering, CS, Business</p><strong>Profile-led matching</strong></div>
-    </div>
-  </div>
+<section id="intakes" class="card intake">
+  <div><span class="eyebrow">INTAKE EXPLORER</span><h2>Find the right intake — across destinations.</h2><p>Not limited to 2026–27. Browse upcoming, current and future intakes by country, level and program.</p></div>
+  <div class="filters"><select><option>All countries</option><option>USA</option><option>Canada</option><option>UK</option><option>Australia</option><option>Germany</option><option>Ireland</option><option>New Zealand</option></select><select><option>All education levels</option><option>12th / High School</option><option>Foundation / Pathway</option><option>Diploma</option><option>Bachelor's</option><option>PG Diploma</option><option>Master's</option><option>Doctorate / PhD</option><option>Postdoctoral</option><option>Working Professional</option></select><button class="btn">Explore intakes →</button></div>
+  <div class="intake-row"><span>Fall / Autumn</span><b>Aug – Oct</b><i>Open in many destinations</i></div>
+  <div class="intake-row"><span>Spring / Winter</span><b>Jan – Mar</b><i>Open in selected programs</i></div>
+  <div class="intake-row"><span>Summer</span><b>May – Jun</b><i>Program dependent</i></div>
 </section>
 
-<section id="report">
-  <div class="container">
-    <div class="head"><div><div class="eyebrow">Sample assessment report</div><h2>A scorecard students can actually understand.</h2></div><p>The scorecard is designed to create clarity — not to promise admission or visa outcomes.</p></div>
-    <div class="report"><div class="report-grid">
-      <div class="report-panel">
-        <div class="report-score"><div><div style="font-size:12px;color:#667085">Overall Eduvia Score</div><div class="big">84</div></div><span class="good">Good starting profile</span></div>
-        <div class="metric-grid">
-          <div class="metric"><span>Academic Fit</span><b>92%</b></div><div class="metric"><span>Budget Match</span><b>78%</b></div>
-          <div class="metric"><span>Course Fit</span><b>88%</b></div><div class="metric"><span>English Readiness</span><b>74%</b></div>
-        </div>
-      </div>
-      <div class="report-panel">
-        <h3 style="margin-top:0">Illustrative USA pathway</h3><p style="color:#667085;margin-top:6px">MS in Computer Science / related programs</p>
-        <div class="mix">
-          <div class="mix-row"><span>Safe options</span><b>2</b></div><div class="mix-row"><span>Target options</span><b>4</b></div><div class="mix-row"><span>Ambitious options</span><b>2</b></div>
-        </div>
-        <div style="margin-top:16px;padding:14px;border-radius:16px;background:#f7f9fc;color:#667085;font-size:12px;line-height:1.6">Estimates only. Final admissions, costs and visa outcomes depend on current university and immigration rules.</div>
-      </div>
-    </div></div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <div class="expert">
-      <div class="expert-grid">
-        <div><div class="eyebrow">High-intent handoff</div><h2>Get clarity before you spend lakhs.</h2><p>Complete your assessment first. Then share your profile with an Eduvia expert so the conversation starts with context instead of guesswork.</p></div>
-        <button class="btn primary" data-start>Start assessment — ₹100</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="container">
-    <div class="head"><div><div class="eyebrow">FAQ</div><h2>Simple answers before you begin.</h2></div></div>
-    <div class="faq">
-      <details open><summary>What do I get for ₹100?</summary><p>A guided assessment experience and a personalized starting report with profile-fit guidance, estimated budget and university categories. Production integrations can later connect this to live university data.</p></details>
-      <details><summary>Does Eduvia guarantee admission?</summary><p>No. University fit, admission chance, cost and visa outcomes are estimates and can change based on current requirements.</p></details>
-      <details><summary>Can I speak with an Eduvia expert?</summary><p>Yes. After completing the assessment, the student can request an expert call. The production version can route that request into the counselor CRM.</p></details>
-    </div>
-  </div>
+<section id="applications" class="grid two">
+<article class="card"><span class="eyebrow">APPLICATIONS</span><h2>Keep every document in one place.</h2><p>Track transcripts, English tests, SOPs, LORs, passports, financial documents and application status without losing the thread.</p><div class="progressline"><span>5 / 8 documents ready</span><div class="bar"><i style="width:62%"></i></div></div><a class="textbtn" href="#">Open document checklist →</a></article>
+<article class="card" id="support"><span class="eyebrow">COUNSELLING</span><h2>Get guidance when you need it.</h2><p>Book a 1:1 session for course selection, destination fit, application planning or visa preparation.</p><a class="btn" href="#">Book counselling →</a></article>
 </section>
 </main>
 
-<footer><div class="container foot"><span>© 2026 Eduvia</span><span>Study abroad guidance • Assessment-first platform</span></div></footer>
-
-<div class="modal" id="modal">
-  <div class="dialog">
-    <div class="dialog-head"><div><h2 style="margin:0">Eduvia Assessment</h2><div style="font-size:12px;color:#667085">15–20 minutes • ₹100</div></div><button class="close" id="close">×</button></div>
-    <div class="progress"><i id="prog"></i></div>
-    <div id="content"></div>
-  </div>
-</div>
-
-<script>
-const questions=[
- {k:"degree",q:"What is your current / completed degree?",opts:["B.Tech / B.E.","B.Sc / BCA / Other UG","MBA / Other PG","Other"]},
- {k:"cgpa",q:"What is your current CGPA / percentage?",opts:["9.0+ / 90%+","8.0–8.99 / 80–89%","7.0–7.99 / 70–79%","Below 7.0 / Below 70%"]},
- {k:"backlogs",q:"How many backlogs have you had?",opts:["0","1–2","3–5","6+"]},
- {k:"english",q:"What is your English test status?",opts:["Score ready","Test booked / preparing","Planning to take a test","Not sure yet"]},
- {k:"country",q:"Which country interests you most?",opts:["USA","Canada","UK","Australia","Germany","Not sure yet"]},
- {k:"budget",q:"What is your approximate total budget?",opts:["Under ₹20L","₹20–30L","₹30–40L","₹40L+"]},
- {k:"intake",q:"Which intake are you targeting?",opts:["Spring","Fall","Next available","Not sure yet"]},
- {k:"goal",q:"What is your main career goal?",opts:["High-paying job","Research / PhD","Career switch","International exposure"]}
-];
-let idx=0,answers={}; const modal=document.getElementById("modal"),content=document.getElementById("content"),prog=document.getElementById("prog");
-function openAssessment(){idx=0;answers={};modal.classList.add("open");render();}
-function render(){
- const q=questions[idx]; prog.style.width=(idx/questions.length*100)+"%";
- content.innerHTML=`<div style="font-size:12px;color:#667085;margin-bottom:8px">Question ${idx+1} of ${questions.length}</div>
- <div class="q">${q.q}</div>
- <div class="opts">${q.opts.map(o=>`<button class="opt ${answers[q.k]===o?"sel":""}" data-opt="${o.replace(/"/g,"&quot;")}">${o}</button>`).join("")}</div>
- <div class="navline"><button class="btn ghost ${idx?"":"hidden"}" id="back">Back</button><button class="btn primary" id="next" disabled>${idx===questions.length-1?"See my result":"Next"}</button></div>`;
- document.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>{answers[q.k]=b.dataset.opt;document.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");document.getElementById("next").disabled=false;});
- if(idx){document.getElementById("back").onclick=()=>{idx--;render();}}
- document.getElementById("next").onclick=()=>{if(!answers[q.k])return; if(idx<questions.length-1){idx++;render();}else result();}
-}
-function score(){let s=74;if(answers.cgpa?.startsWith("9.0"))s+=10;else if(answers.cgpa?.startsWith("8.0"))s+=7;else if(answers.cgpa?.startsWith("7.0"))s+=3;if(answers.backlogs==="0")s+=5;if(answers.english==="Score ready")s+=5;if(answers.budget==="₹40L+")s+=2;return Math.max(55,Math.min(96,s));}
-function result(){const s=score();prog.style.width="100%";content.innerHTML=`<div style="text-align:center"><div style="font-size:12px;color:#667085">Illustrative Eduvia Score</div><div class="big" style="color:var(--blue);font-size:70px">${s}/100</div><div style="padding:18px;border-radius:18px;background:#f7f9fc;text-align:left"><strong>${s>=85?"Strong starting profile":s>=75?"Good starting profile":"Needs improvement before applying"}</strong><p style="color:#667085;line-height:1.6">Your production report can include university matches, estimated budget, improvement areas and next steps.</p><button class="btn primary" id="expert">Talk to an Eduvia Expert</button></div></div>`;document.getElementById("expert").onclick=()=>{content.innerHTML=`<h2 style="margin-top:0">Request an expert call</h2><p style="color:#667085">This MVP demo captures the intent. The production version can create a CRM lead and notify the assigned counselor.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><input style="padding:13px;border:1px solid var(--line);border-radius:12px" placeholder="Full name"><input style="padding:13px;border:1px solid var(--line);border-radius:12px" placeholder="Phone"><input style="padding:13px;border:1px solid var(--line);border-radius:12px" placeholder="Email"><select style="padding:13px;border:1px solid var(--line);border-radius:12px"><option>As soon as possible</option><option>Today evening</option><option>Tomorrow</option></select></div><button class="btn primary" style="margin-top:18px" id="send">Request expert call</button>`;document.getElementById("send").onclick=()=>{alert("Demo lead captured.");modal.classList.remove("open")}}}
-document.querySelectorAll("[data-start]").forEach(b=>b.onclick=openAssessment);document.getElementById("close").onclick=()=>modal.classList.remove("open");modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("open")});
-</script>
-</body></html>
+<footer>
+  <img src="assets/eduvia-logo-white.png" alt="Eduvia">
+  <p>Student-first guidance for your global education journey.</p>
+  <small>© 2026 Eduvia · Student Portal</small>
+</footer>
+</body>
+</html>
