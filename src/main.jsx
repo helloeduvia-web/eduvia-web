@@ -351,6 +351,7 @@ function LoginModal({onClose,onStudentName}){
         setMessage(
           'Account created successfully. Your Eduvia student profile is ready.'
         );
+        setTimeout(() => onClose(), 900);
       }else{
         const {data,error}=await supabase.auth.signInWithPassword({
           email:form.email.trim(),
