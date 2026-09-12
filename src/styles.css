@@ -131,7 +131,6 @@
 /* Student-only refinement */
 .hero-media{overflow:visible}
 .hero-media .hero-photo{position:relative;z-index:1;width:100%;height:540px;object-fit:cover;object-position:center;border-radius:30px;box-shadow:var(--shadow)}
-.hero-media .hero-logo-overlay{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);width:min(62%,520px);height:auto;object-fit:contain;border-radius:0;box-shadow:none;filter:drop-shadow(0 8px 20px rgba(255,255,255,.18))}
 .student-story-grid{grid-template-columns:1.35fr .65fr}
 .assessment-hint{font-size:12px;max-width:600px;margin:8px 0 0}
 .dashboard-data-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
@@ -150,12 +149,12 @@
 
 @media(max-width:900px){
   .hero-media .hero-photo{height:360px}
-  .hero-media .hero-logo-overlay{width:min(70%,420px)}
+  
   .dashboard-data-grid{grid-template-columns:1fr}
 }
 @media(max-width:600px){
   .hero-media .hero-photo{height:300px;border-radius:20px}
-  .hero-media .hero-logo-overlay{width:76%}
+  
   .student-story-grid{grid-template-columns:1fr}
 }
 
