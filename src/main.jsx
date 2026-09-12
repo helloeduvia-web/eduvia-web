@@ -165,48 +165,379 @@ function App(){
   const [mobile,setMobile]=useState(false);
   const [login,setLogin]=useState(false);
   const [studentName,setStudentName]=useState('Revathi');
+  const [sessionUser,setSessionUser]=useState(null);
+  const [continueToAssessment,setContinueToAssessment]=useState(false);
 
   const progress=Math.round(((step+1)/assessmentQuestions.length)*100);
   const selected=answers[step];
   const current=assessmentQuestions[step];
 
-  const go=(id)=>{ setView(id); window.scrollTo({top:0,behavior:'smooth'}); setMobile(false); };
+  useEffect(()=>{
+    if(!supabase) return;
+
+    supabase.auth.getSession().then(({data})=>{
+      const user=data?.session?.user || null;
+      setSessionUser(user);
+
+      if(user){
+        const name=user.user_metadata?.full_name;
+        if(name) setStudentName(name);
+      }
+    });
+
+    const {
+      data:{subscription}
+    }=supabase.auth.onAuthStateChange((_event,session)=>{
+      const user=session?.user || null;
+      setSessionUser(user);
+
+      if(user){
+        const name=user.user_metadata?.full_name;
+        if(name) setStudentName(name);
+      }
+    });
+
+    return ()=>{
+      subscription.unsubscribe();
+    };
+  },[]);
+
+  const go=(id)=>{
+    setView(id);
+    window.scrollTo({top:0,behavior:'smooth'});
+    setMobile(false);
+  };
+
+  const startAssessment=()=>{
+    if(!sessionUser){
+      setContinueToAssessment(true);
+      setLogin(true);
+      return;
+    }
+
+    setStep(0);
+    setAnswers({});
+    setAssessment(true);
+  };
+
+  const handleLoginClose=()=>{
+    setLogin(false);
+
+    if(continueToAssessment && sessionUser){
+      setContinueToAssessment(false);
+      setStep(0);
+      setAnswers({});
+      setAssessment(true);
+    }
+  };
+
+  const logout=async()=>{
+    if(supabase){
+      await supabase.auth.signOut();
+    }
+
+    setSessionUser(null);
+    setStudentName('Revathi');
+    setAssessment(false);
+    setLogin(false);
+    setContinueToAssessment(false);
+  };
 
   return <>
     <header className="nav">
       <div className="container nav-inner">
-        <button className="brand" onClick={()=>go('home')} aria-label="Eduvia home"><img src="/assets/eduvia-logo.png" alt="Eduvia" /></button>
-        <nav className={mobile?'open':''} aria-label="Primary navigation">
-          <button className={view==='home'?'active':''} aria-current={view==='home'?'page':undefined} onClick={()=>go('home')}>For Students</button>
-          <button className={view==='destinations'?'active':''} aria-current={view==='destinations'?'page':undefined} onClick={()=>go('destinations')}>Destinations</button><button className={view==='intakes'?'active':''} aria-current={view==='intakes'?'page':undefined} onClick={()=>go('intakes')}>Intakes</button><button className={view==='programs'?'active':''} aria-current={view==='programs'?'page':undefined} onClick={()=>go('programs')}>Programs</button>
-          <button className={view==='dashboard'?'active':''} aria-current={view==='dashboard'?'page':undefined} onClick={()=>go('dashboard')}>Dashboard</button>
+
+        <button
+          className="brand"
+          onClick={()=>go('home')}
+          aria-label="Eduvia home"
+        >
+          <img src="/assets/eduvia-logo.png" alt="Eduvia" />
+        </button>
+
+        <nav
+          className={mobile?'open':''}
+          aria-label="Primary navigation"
+        >
+          <button
+            className={view==='home'?'active':''}
+            aria-current={view==='home'?'page':undefined}
+            onClick={()=>go('home')}
+          >
+            For Students
+          </button>
+
+          <button
+            className={view==='destinations'?'active':''}
+            aria-current={view==='destinations'?'page':undefined}
+            onClick={()=>go('destinations')}
+          >
+            Destinations
+          </button>
+
+          <button
+            className={view==='intakes'?'active':''}
+            aria-current={view==='intakes'?'page':undefined}
+            onClick={()=>go('intakes')}
+          >
+            Intakes
+          </button>
+
+          <button
+            className={view==='programs'?'active':''}
+            aria-current={view==='programs'?'page':undefined}
+            onClick={()=>go('programs')}
+          >
+            Programs
+          </button>
+
+          <button
+            className={view==='dashboard'?'active':''}
+            aria-current={view==='dashboard'?'page':undefined}
+            onClick={()=>go('dashboard')}
+          >
+            Dashboard
+          </button>
         </nav>
+
         <div className="nav-actions">
-          <button className={login?'link-btn active-action':'link-btn'} onClick={()=>setLogin(true)} aria-current={login?'page':undefined}>Login</button>
-          <button className="primary small" onClick={()=>setAssessment(true)}>Get Started <Icon name="arrow"/></button>
+
+          {sessionUser ? (
+            <button
+              className="link-btn"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              className="link-btn"
+              onClick={()=>{
+                setContinueToAssessment(false);
+                setLogin(true);
+              }}
+            >
+              Login / Sign up
+            </button>
+          )}
+
+          <button
+            className="primary small"
+            onClick={startAssessment}
+          >
+            Get Started <Icon name="arrow"/>
+          </button>
+
         </div>
-        <button className="menu-btn" onClick={()=>setMobile(!mobile)}><Icon name="menu"/></button>
+
+        <button
+          className="menu-btn"
+          onClick={()=>setMobile(!mobile)}
+        >
+          <Icon name="menu"/>
+        </button>
+
       </div>
     </header>
 
-    {view==='home' && <Home go={go} openAssessment={()=>setAssessment(true)}/>} 
-    {view==='destinations' && <Destinations openAssessment={()=>setAssessment(true)}/>} 
-    {view==='intakes' && <Intakes openAssessment={()=>setAssessment(true)}/>}
-    {view==='programs' && <Programs openAssessment={()=>setAssessment(true)}/>} 
-    {view==='dashboard' && <Dashboard studentName={studentName}/>}
+    {view==='home' &&
+      <Home
+        go={go}
+        openAssessment={startAssessment}
+      />
+    }
 
-    <footer><div className="container footer-grid"><div><div className="footer-brand"><img src="/assets/eduvia-logo.png" alt="Eduvia" /></div><p>Delivering Opportunities</p><small className="footer-trust">Student-first guidance from India to the world.</small></div><div><b>Explore</b><span>Destinations</span><span>Programs & rare courses</span><span>Universities</span><span>Intake calendar</span></div><div><b>My Journey</b><span>Free assessment</span><span>Student dashboard</span><span>My documents</span><span>My applications</span></div><div><b>Support</b><span>Book counselling</span><span>Privacy</span><span>Terms</span><span>Contact Eduvia</span></div></div><div className="container footer-bottom">© 2026 Eduvia · Delivering Opportunities · Student platform</div></footer>
+    {view==='destinations' &&
+      <Destinations
+        openAssessment={startAssessment}
+      />
+    }
 
-    {login && <LoginModal onClose={()=>setLogin(false)} onStudentName={setStudentName} />}
+    {view==='intakes' &&
+      <Intakes
+        openAssessment={startAssessment}
+      />
+    }
 
-    {assessment && <div className="modal-backdrop" onMouseDown={(e)=>e.target===e.currentTarget&&setAssessment(false)}><div className="assessment-modal">
-      <div className="modal-head"><div><span className="eyebrow">FREE STUDY ABROAD PROFILE ASSESSMENT</span><h2>{step<5?current.label:'Your study-abroad snapshot is ready.'}</h2>{step<5 && <p className="assessment-hint">{current.hint}</p>}</div><button className="close" onClick={()=>setAssessment(false)}>×</button></div>
-      {step<5 ? <>
-        <div className="progress"><span style={{width:`${progress}%`}}></span></div><div className="step-copy">Step {step+1} of 5 <span>{progress}%</span></div>
-        <div className="options">{current.options.map(o=><button key={o} className={selected===o?'selected':''} onClick={()=>setAnswers({...answers,[step]:o})}>{selected===o?<span className="check">✓</span>:<span className="radio"/>}{o}</button>)}</div>
-        <div className="modal-foot"><button className="ghost" onClick={()=>step>0&&setStep(step-1)} disabled={step===0}>Back</button><button className="primary" disabled={!selected} onClick={()=>setStep(step+1)}>{step===4?'View My Study-Abroad Snapshot':'Continue'} <Icon name="arrow"/></button></div>
-      </> : <Result answers={answers} onClose={()=>setAssessment(false)}/>} 
-    </div></div>}
+    {view==='programs' &&
+      <Programs
+        openAssessment={startAssessment}
+      />
+    }
+
+    {view==='dashboard' &&
+      <Dashboard
+        studentName={studentName}
+      />
+    }
+
+    <footer>
+      <div className="container footer-grid">
+
+        <div>
+          <div className="footer-brand">
+            <img
+              src="/assets/eduvia-logo.png"
+              alt="Eduvia"
+            />
+          </div>
+
+          <p>Delivering Opportunities</p>
+
+          <small className="footer-trust">
+            Student-first guidance from India to the world.
+          </small>
+        </div>
+
+        <div>
+          <b>Explore</b>
+          <span>Destinations</span>
+          <span>Programs & rare courses</span>
+          <span>Universities</span>
+          <span>Intake calendar</span>
+        </div>
+
+        <div>
+          <b>My Journey</b>
+          <span>Free assessment</span>
+          <span>Student dashboard</span>
+          <span>My documents</span>
+          <span>My applications</span>
+        </div>
+
+        <div>
+          <b>Support</b>
+          <span>Book counselling</span>
+          <span>Privacy</span>
+          <span>Terms</span>
+          <span>Contact Eduvia</span>
+        </div>
+
+      </div>
+
+      <div className="container footer-bottom">
+        © 2026 Eduvia · Delivering Opportunities · Student platform
+      </div>
+    </footer>
+
+    {login &&
+      <LoginModal
+        onClose={handleLoginClose}
+        onStudentName={setStudentName}
+      />
+    }
+
+    {assessment &&
+      <div
+        className="modal-backdrop"
+        onMouseDown={e=>{
+          if(e.target===e.currentTarget){
+            setAssessment(false);
+          }
+        }}
+      >
+        <div className="assessment-modal">
+
+          <div className="modal-head">
+            <div>
+              <span className="eyebrow">
+                FREE STUDY ABROAD PROFILE ASSESSMENT
+              </span>
+
+              <h2>
+                {step<5
+                  ? current.label
+                  : 'Your study-abroad snapshot is ready.'}
+              </h2>
+
+              {step<5 &&
+                <p className="assessment-hint">
+                  {current.hint}
+                </p>
+              }
+            </div>
+
+            <button
+              className="close"
+              onClick={()=>setAssessment(false)}
+            >
+              ×
+            </button>
+          </div>
+
+          {step<5 ? (
+            <>
+              <div className="progress">
+                <span
+                  style={{width:`${progress}%`}}
+                ></span>
+              </div>
+
+              <div className="step-copy">
+                Step {step+1} of 5
+                <span>{progress}%</span>
+              </div>
+
+              <div className="options">
+                {current.options.map(o=>(
+                  <button
+                    key={o}
+                    className={selected===o?'selected':''}
+                    onClick={()=>
+                      setAnswers({
+                        ...answers,
+                        [step]:o
+                      })
+                    }
+                  >
+                    {selected===o
+                      ? <span className="check">✓</span>
+                      : <span className="radio"/>
+                    }
+
+                    {o}
+                  </button>
+                ))}
+              </div>
+
+              <div className="modal-foot">
+
+                <button
+                  className="ghost"
+                  onClick={()=>
+                    step>0 && setStep(step-1)
+                  }
+                  disabled={step===0}
+                >
+                  Back
+                </button>
+
+                <button
+                  className="primary"
+                  disabled={!selected}
+                  onClick={()=>
+                    setStep(step+1)
+                  }
+                >
+                  {step===4
+                    ? 'View My Study-Abroad Snapshot'
+                    : 'Continue'}
+
+                  <Icon name="arrow"/>
+                </button>
+
+              </div>
+            </>
+          ) : (
+            <Result
+              answers={answers}
+              onClose={()=>setAssessment(false)}
+            />
+          )}
+
+        </div>
+      </div>
+    }
   </>
 }
 
@@ -374,8 +705,8 @@ function LoginModal({onClose,onStudentName}){
           );
         }
 
-        setMessage('Welcome back. You are now signed in to Eduvia.');
-      }
+        setMessage('Welcome back to Eduvia.');
+setTimeout(() => onClose(), 900);
     }catch(err){
       setMessage(err?.message || 'Unable to continue.');
     }finally{
