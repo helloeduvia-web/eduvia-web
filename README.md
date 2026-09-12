@@ -21,11 +21,3 @@ npm run dev
 ```
 
 The Vite frontend runs on the default Vite port and the Express API runs on port 4000.
-
-
-## Visual refresh
-The student-facing photography was refreshed with a new curated set of remote image assets; legacy photo assets were removed.
-
-
-## Photography refresh
-All legacy student/campus photo assets were removed. Student-facing sections now use a curated set of free Unsplash images with mixed-gender student groups; the Eduvia brand logo assets are retained.
