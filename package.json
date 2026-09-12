@@ -3,9 +3,7 @@
   "private": true,
   "version": "1.1.0",
   "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
-  },
+  "engines": { "node": ">=24.18.0" },
   "scripts": {
     "dev": "concurrently -k \"npm:dev:api\" \"npm:dev:web\"",
     "dev:api": "node --watch server.js",
