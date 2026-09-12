@@ -1,6 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { createClient } from '@supabase/supabase-js';
 import './styles.css';
+
+const supabaseUrl = import.meta.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey =
+  import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  '';
+
+const supabase =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null;
 
 const destinations = [
   ['UK','2 yr stay-back','↗'],['USA','Top-ranked','★'],['Canada','Pathway options','◈'],['Australia','Feb / Jul intakes','⌁'],
@@ -274,56 +286,237 @@ function Programs({openAssessment}){
 
 function Dashboard({compact=false,studentName='Revathi'}){return <section className={compact?'dash-shell compact':'inner-page dash-page'}><div className="container"><div className="dash-head"><div><span className="eyebrow">STUDENT DASHBOARD</span><h2>Good morning, {studentName}</h2><p>Your next best action is ready.</p></div><div className="dash-score"><span>Profile readiness</span><b>82/100</b></div></div><div className="dash-progress">{['Profile','Shortlist','Application','Offer','Visa Prep','Pre-Departure'].map((x,i)=><div className={i<2?'active':''} key={x}><span>{i+1}</span>{x}</div>)}</div>{!compact&&<div className="dashboard-story"><img src="/assets/library-study.jpg" alt="University students walking through campus"/><div><span className="eyebrow">YOUR NEXT MILESTONE</span><h3>Keep preparation connected.</h3><p>From documents and funding to your departure plan, see the next action without losing sight of the bigger journey.</p><div className="dashboard-data-pills"><span>Profile 82%</span><span>Documents 6/8</span><span>Shortlist 6</span></div></div></div>}<div className="dash-grid"><div className="dash-main"><div className="dash-card"><div className="card-title"><b>Next best action</b><span>Recommended for you</span></div><h3>Complete English test details</h3><p>Add your English test status so Eduvia can make university recommendations more practical and relevant.</p><button className="secondary">Complete now <Icon name="arrow"/></button></div><div className="dash-card"><div className="card-title"><b>My shortlist</b><span>6 universities · 3 countries</span></div><div className="uni-list">{['Germany · Data Science','UK · Business Analytics','Ireland · Artificial Intelligence'].map((x,i)=><div key={x}><span>{i+1}</span><b>{x}</b><small>View details →</small></div>)}</div></div><div className="dashboard-data-grid"><div className="dash-card mini-data"><b>Documents</b><strong>6 / 8</strong><span>2 items need attention</span></div><div className="dash-card mini-data"><b>Applications</b><strong>2 active</strong><span>Next deadline in 18 days</span></div><div className="dash-card mini-data"><b>Counselling</b><strong>1 session</strong><span>Book or reschedule anytime</span></div></div></div><div className="dash-side"><div className="dash-card nav-card"><b>My student workspace</b>{['My Profile','My Countries','My Courses','My Shortlist','My Roadmap','My Documents','My Applications','My Counselling'].map((x,i)=><button key={x} className={i===0?'selected':''}>{x}<span>›</span></button>)}</div><div className="dash-card dashboard-trust"><span className="eyebrow">STUDENT-ONLY ACCESS</span><h3>Your data stays in your journey.</h3><p>Keep your profile, shortlist, documents and application progress together so every recommendation has context.</p></div></div></div></div></section>}
 function LoginModal({onClose,onStudentName}){
-  const [mode,setMode]=useState('email');
-  const [otpSent,setOtpSent]=useState(false);
-  const [form,setForm]=useState({name:'',email:'',password:'',phone:'',otp:''});
+  const [mode,setMode]=useState('signup');
+  const [form,setForm]=useState({
+    name:'',
+    email:'',
+    password:'',
+    phone:''
+  });
   const [message,setMessage]=useState('');
-  const update=(key,value)=>setForm(prev=>({...prev,[key]:value}));
+  const [saving,setSaving]=useState(false);
+
+  const update=(key,value)=>{
+    setForm(prev=>({...prev,[key]:value}));
+  };
+
+  const saveStudentProfile=async(user)=>{
+    if(!supabase || !user) return;
+
+    const {error}=await supabase
+      .from('students')
+      .upsert({
+        auth_user_id:user.id,
+        full_name:form.name.trim() || user.user_metadata?.full_name || 'Student',
+        email:user.email || form.email.trim(),
+        mobile:form.phone.trim() || user.user_metadata?.mobile || '',
+        updated_at:new Date().toISOString()
+      },{
+        onConflict:'auth_user_id'
+      });
+
+    if(error) throw error;
+  };
+
   const submit=async(e)=>{
     e.preventDefault();
     setMessage('');
+    setSaving(true);
+
     try{
-      if(mode==='email'){
-        const res=await fetch('/api/auth/register-or-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:form.name,email:form.email,password:form.password})});
-        const data=await res.json();
-        if(!res.ok) throw new Error(data.message||'Unable to continue');
-        onStudentName?.(data.user.name || 'Revathi'); setMessage(`Welcome ${data.user.name || 'to Eduvia'} — your student account is ready.`);
-      }else if(!otpSent){
-        const res=await fetch('/api/auth/otp/request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:form.phone})});
-        const data=await res.json();
-        if(!res.ok) throw new Error(data.message||'Unable to send OTP');
-        setOtpSent(true);
-        setMessage(`Demo OTP: ${data.demoOtp}. In production this will be replaced by a real SMS/WhatsApp provider.`);
-      }else{
-        const res=await fetch('/api/auth/otp/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:form.phone,otp:form.otp})});
-        const data=await res.json();
-        if(!res.ok) throw new Error(data.message||'Invalid OTP');
-        onStudentName?.(data.user.name || 'Revathi'); setMessage(`Mobile verified. Welcome ${data.user.name || 'to Eduvia'}!`);
+      if(!supabase){
+        throw new Error('Supabase connection is missing.');
       }
-    }catch(err){setMessage(err.message)}
+
+      if(mode==='signup'){
+        const {data,error}=await supabase.auth.signUp({
+          email:form.email.trim(),
+          password:form.password,
+          options:{
+            data:{
+              full_name:form.name.trim(),
+              mobile:form.phone.trim()
+            }
+          }
+        });
+
+        if(error) throw error;
+        if(!data.user) throw new Error('Unable to create your account.');
+
+        await saveStudentProfile(data.user);
+
+        onStudentName?.(form.name.trim() || 'Student');
+
+        setMessage(
+          'Account created successfully. Your Eduvia student profile is ready.'
+        );
+      }else{
+        const {data,error}=await supabase.auth.signInWithPassword({
+          email:form.email.trim(),
+          password:form.password
+        });
+
+        if(error) throw error;
+
+        if(data.user){
+          const {data:profile}=await supabase
+            .from('students')
+            .select('full_name')
+            .eq('auth_user_id',data.user.id)
+            .maybeSingle();
+
+          onStudentName?.(
+            profile?.full_name ||
+            data.user.user_metadata?.full_name ||
+            'Student'
+          );
+        }
+
+        setMessage('Welcome back. You are now signed in to Eduvia.');
+      }
+    }catch(err){
+      setMessage(err?.message || 'Unable to continue.');
+    }finally{
+      setSaving(false);
+    }
   };
-  return <div className="modal-backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}><div className="login-modal">
-    <div className="login-logo"><img src="/assets/eduvia-logo.png" alt="Eduvia"/></div>
-    <button className="close" onClick={onClose}>×</button>
-    <span className="eyebrow">WELCOME TO EDUVIA</span>
-    <h2>Continue your global journey.</h2>
-    <p className="login-sub">Use either your email or mobile number to access your student profile.</p>
-    <div className="login-tabs"><button className={mode==='email'?'active':''} onClick={()=>{setMode('email');setMessage('')}}>Email & Password</button><button className={mode==='phone'?'active':''} onClick={()=>{setMode('phone');setMessage('')}}>Mobile OTP</button></div>
-    <form onSubmit={submit}>
-      {mode==='email' ? <>
-        <label>Name<input value={form.name} onChange={e=>update('name',e.target.value)} placeholder="Your name" required /></label>
-        <label>Email<input type="email" value={form.email} onChange={e=>update('email',e.target.value)} placeholder="you@example.com" required /></label>
-        <label>Password<input type="password" minLength="6" value={form.password} onChange={e=>update('password',e.target.value)} placeholder="Minimum 6 characters" required /></label>
-        <button className="primary full" type="submit">Continue with Email <Icon name="arrow"/></button>
-      </> : <>
-        <label>Mobile number<input type="tel" value={form.phone} onChange={e=>update('phone',e.target.value.replace(/\D/g,'').slice(0,10))} placeholder="10-digit mobile number" minLength="10" maxLength="10" required /></label>
-        {otpSent && <label>OTP<input inputMode="numeric" value={form.otp} onChange={e=>update('otp',e.target.value.replace(/\D/g,'').slice(0,6))} placeholder="Enter 6-digit OTP" minLength="6" maxLength="6" required /></label>}
-        <button className="primary full" type="submit">{otpSent?'Verify OTP':'Send OTP'} <Icon name="arrow"/></button>
-      </>}
-    </form>
-    {message && <div className="login-message">{message}</div>}
-    <small className="login-note">By continuing, you agree to use Eduvia for study-abroad discovery and qualification.</small>
-  </div></div>
+
+  return (
+    <div
+      className="modal-backdrop"
+      onMouseDown={e=>{
+        if(e.target===e.currentTarget) onClose();
+      }}
+    >
+      <div className="login-modal">
+
+        <div className="login-logo">
+          <img src="/assets/eduvia-logo.png" alt="Eduvia"/>
+        </div>
+
+        <button className="close" onClick={onClose}>×</button>
+
+        <span className="eyebrow">WELCOME TO EDUVIA</span>
+
+        <h2>
+          {mode==='signup'
+            ? 'Create your student account.'
+            : 'Welcome back.'}
+        </h2>
+
+        <p className="login-sub">
+          Save your profile once and keep your study-abroad journey connected.
+        </p>
+
+        <div className="login-tabs">
+          <button
+            type="button"
+            className={mode==='signup'?'active':''}
+            onClick={()=>{
+              setMode('signup');
+              setMessage('');
+            }}
+          >
+            Sign up
+          </button>
+
+          <button
+            type="button"
+            className={mode==='login'?'active':''}
+            onClick={()=>{
+              setMode('login');
+              setMessage('');
+            }}
+          >
+            Login
+          </button>
+        </div>
+
+        <form onSubmit={submit}>
+
+          {mode==='signup' && (
+            <label>
+              Full name
+              <input
+                value={form.name}
+                onChange={e=>update('name',e.target.value)}
+                placeholder="Your full name"
+                required
+              />
+            </label>
+          )}
+
+          <label>
+            Email
+            <input
+              type="email"
+              value={form.email}
+              onChange={e=>update('email',e.target.value)}
+              placeholder="you@example.com"
+              required
+            />
+          </label>
+
+          {mode==='signup' && (
+            <label>
+              Mobile number
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e=>
+                  update(
+                    'phone',
+                    e.target.value.replace(/\D/g,'').slice(0,10)
+                  )
+                }
+                placeholder="10-digit mobile number"
+                minLength="10"
+                maxLength="10"
+                required
+              />
+            </label>
+          )}
+
+          <label>
+            Password
+            <input
+              type="password"
+              value={form.password}
+              onChange={e=>update('password',e.target.value)}
+              placeholder="Minimum 6 characters"
+              minLength="6"
+              required
+            />
+          </label>
+
+          <button
+            className="primary full"
+            type="submit"
+            disabled={saving}
+          >
+            {saving
+              ? 'Please wait…'
+              : mode==='signup'
+                ? 'Create Student Account'
+                : 'Login to Eduvia'}
+            <Icon name="arrow"/>
+          </button>
+
+        </form>
+
+        {message && (
+          <div className="login-message">
+            {message}
+          </div>
+        )}
+
+        <small className="login-note">
+          By continuing, you agree to use Eduvia for study-abroad discovery and qualification.
+        </small>
+
+      </div>
+    </div>
+  );
 }
 
 function Result({answers,onClose}){
