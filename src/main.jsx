@@ -239,7 +239,7 @@ const [otp,setOtp]=useState('');
     }
 
     setSessionUser(null);
-    setStudentName('Revathi');
+    setStudentName('eduvia');
     setAssessment(false);
     setLogin(false);
     setContinueToAssessment(false);
@@ -379,9 +379,10 @@ const [otp,setOtp]=useState('');
         <div>
           <div className="footer-brand">
             <img
-              src="/assets/eduvia-logo.png"
-              alt="Eduvia"
-            />
+  src="/assets/eduvia-logo.png"
+  alt="Eduvia"
+  style={{filter:'brightness(0) invert(1)'}}
+/>
           </div>
 
           <p>Delivering Opportunities</p>
@@ -662,17 +663,46 @@ function LoginModal({onClose,onStudentName}){
         throw new Error('Supabase connection is missing.');
       }
 
-      if(mode==='signup'){
-        const {data,error}=await supabase.auth.signUp({
-          email:form.email.trim(),
-          password:form.password,
-          options:{
-            data:{
-              full_name:form.name.trim(),
-              mobile:form.phone.trim()
-            }
-          }
-        });
+      if(mode === 'signup') {
+  const phone = `+91${form.phone.trim()}`;
+
+  if(!otpSent) {
+    const { error } = await supabase.auth.signUp({
+      phone,
+      password: form.password,
+      options: {
+        channel: 'sms',
+        data: {
+          full_name: form.name.trim(),
+          email: form.email.trim(),
+          mobile: form.phone.trim()
+        }
+      }
+    });
+
+    if(error) throw error;
+
+    setOtpSent(true);
+    setMessage('OTP sent to your mobile number.');
+    return;
+  }
+
+  const { data, error } = await supabase.auth.verifyOtp({
+    phone,
+    token: otp,
+    type: 'sms'
+  });
+
+  if(error) throw error;
+  if(!data.user) throw new Error('Unable to verify your mobile number.');
+
+  await saveStudentProfile(data.user);
+
+  onStudentName?.(form.name.trim() || 'Student');
+
+  setMessage('Mobile verified. Your Eduvia student profile is ready.');
+  setTimeout(() => onClose(), 900);
+}
 
         if(error) throw error;
         if(!data.user) throw new Error('Unable to create your account.');
@@ -856,10 +886,10 @@ setTimeout(() => onClose(), 900);
             disabled={saving}
           >
             {saving
-              ? 'Please wait…'
-              : mode==='signup'
-                ? 'Create Student Account'
-                : 'Login to Eduvia'}
+  ? 'Please wait…'
+  : mode==='signup'
+    ? 'Create Student Account'
+    : 'Login to Eduvia'}
             <Icon name="arrow"/>
           </button>
 
