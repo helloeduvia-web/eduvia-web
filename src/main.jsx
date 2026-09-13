@@ -707,6 +707,7 @@ function LoginModal({onClose,onStudentName}){
 
         setMessage('Welcome back to Eduvia.');
 setTimeout(() => onClose(), 900);
+      }
     }catch(err){
       setMessage(err?.message || 'Unable to continue.');
     }finally{
