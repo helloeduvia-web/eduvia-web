@@ -167,9 +167,6 @@ function App(){
   const [studentName,setStudentName]=useState('Eduvia');
   const [sessionUser,setSessionUser]=useState(null);
   const [continueToAssessment,setContinueToAssessment]=useState(false);
- const [otpSent,setOtpSent]=useState(false);
-const [otp,setOtp]=useState('');
-
   const progress=Math.round(((step+1)/assessmentQuestions.length)*100);
   const selected=answers[step];
   const current=assessmentQuestions[step];
