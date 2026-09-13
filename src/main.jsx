@@ -739,15 +739,17 @@ setTimeout(() => onClose(), 900);
         if(e.target===e.currentTarget) onClose();
       }}
     >
-      <div className="login-modal">
+    <div
+  className="login-modal"
+  style={{
+    width: 'min(520px, calc(100vw - 32px))',
+    maxHeight: '90vh',
+    overflowY: 'auto',
+    boxSizing: 'border-box'
+  }}
+>
 
-        <div className="login-logo">
-          <img src="/assets/eduvia-logo.png" alt="Eduvia"/>
-        </div>
-
-        <button className="close" onClick={onClose}>×</button>
-
-        <span className="eyebrow">WELCOME TO EDUVIA</span>
+  <div className="login-logo">
 
         <h2>
           {mode==='signup'
