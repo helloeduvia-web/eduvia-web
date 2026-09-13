@@ -700,20 +700,9 @@ function LoginModal({onClose,onStudentName}){
 
   onStudentName?.(form.name.trim() || 'Student');
 
-  setMessage('Mobile verified. Your Eduvia student profile is ready.');
-  setTimeout(() => onClose(), 900);
-}
-
-        if(error) throw error;
-        if(!data.user) throw new Error('Unable to create your account.');
-
-        await saveStudentProfile(data.user);
-
-        onStudentName?.(form.name.trim() || 'Student');
-
-      setMessage('Mobile verified. Your Eduvia student profile is ready.');
+ setMessage('Mobile verified. Your Eduvia student profile is ready.');
 setTimeout(() => onClose(), 900);
-else{
+}else{
         const {data,error}=await supabase.auth.signInWithPassword({
           email:form.email.trim(),
           password:form.password
