@@ -167,6 +167,8 @@ function App(){
   const [studentName,setStudentName]=useState('Eduvia');
   const [sessionUser,setSessionUser]=useState(null);
   const [continueToAssessment,setContinueToAssessment]=useState(false);
+ const [otpSent,setOtpSent]=useState(false);
+const [otp,setOtp]=useState('');
 
   const progress=Math.round(((step+1)/assessmentQuestions.length)*100);
   const selected=answers[step];
@@ -809,7 +811,32 @@ setTimeout(() => onClose(), 900);
                 required
               />
             </label>
-          )}
+          )} 
+          {mode==='signup' && (
+  <label>
+    Mobile number
+    ...
+  </label>
+)}
+
+{mode==='signup' && otpSent && (
+  <label>
+    OTP
+    <input
+      type="text"
+      inputMode="numeric"
+      value={otp}
+      onChange={e=>
+        setOtp(e.target.value.replace(/\D/g,'').slice(0,6))
+      }
+      placeholder="Enter 6-digit OTP"
+      minLength="6"
+      maxLength="6"
+      required
+    />
+  </label>
+)} 
+          
 
           <label>
             Password
