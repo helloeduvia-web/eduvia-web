@@ -711,11 +711,9 @@ function LoginModal({onClose,onStudentName}){
 
         onStudentName?.(form.name.trim() || 'Student');
 
-        setMessage(
-          'Account created successfully. Your Eduvia student profile is ready.'
-        );
-        setTimeout(() => onClose(), 900);
-      }else{
+      setMessage('Mobile verified. Your Eduvia student profile is ready.');
+setTimeout(() => onClose(), 900);
+}else{
         const {data,error}=await supabase.auth.signInWithPassword({
           email:form.email.trim(),
           password:form.password
