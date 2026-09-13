@@ -420,7 +420,7 @@ function App(){
       </div>
     </footer>
 
-    {login &&
+     {login &&
       <LoginModal
         onClose={handleLoginClose}
         onStudentName={setStudentName}
@@ -437,7 +437,7 @@ function App(){
         }}
       >
         <div className="assessment-modal">
-
+      
           <div className="modal-head">
             <div>
               <span className="eyebrow">
@@ -627,7 +627,8 @@ function LoginModal({onClose,onStudentName}){
   });
   const [message,setMessage]=useState('');
   const [saving,setSaving]=useState(false);
-
+const [otpSent,setOtpSent]=useState(false);
+const [otp,setOtp]=useState('');
   const update=(key,value)=>{
     setForm(prev=>({...prev,[key]:value}));
   };
@@ -826,13 +827,7 @@ setTimeout(() => onClose(), 900);
               />
             </label>
           )} 
-          {mode==='signup' && (
-  <label>
-    Mobile number
-    ...
-  </label>
-)}
-
+          
 {mode==='signup' && otpSent && (
   <label>
     OTP
@@ -869,10 +864,12 @@ setTimeout(() => onClose(), 900);
             type="submit"
             disabled={saving}
           >
-            {saving
+           {saving
   ? 'Please wait…'
   : mode==='signup'
-    ? 'Create Student Account'
+    ? otpSent
+      ? 'Verify OTP'
+      : 'Send OTP'
     : 'Login to Eduvia'}
             <Icon name="arrow"/>
           </button>
