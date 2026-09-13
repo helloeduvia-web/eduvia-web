@@ -713,7 +713,7 @@ function LoginModal({onClose,onStudentName}){
 
       setMessage('Mobile verified. Your Eduvia student profile is ready.');
 setTimeout(() => onClose(), 900);
-}else{
+else{
         const {data,error}=await supabase.auth.signInWithPassword({
           email:form.email.trim(),
           password:form.password
