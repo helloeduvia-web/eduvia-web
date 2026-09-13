@@ -164,7 +164,7 @@ function App(){
   const [answers,setAnswers]=useState({});
   const [mobile,setMobile]=useState(false);
   const [login,setLogin]=useState(false);
-  const [studentName,setStudentName]=useState('Revathi');
+  const [studentName,setStudentName]=useState('Eduvia');
   const [sessionUser,setSessionUser]=useState(null);
   const [continueToAssessment,setContinueToAssessment]=useState(false);
 
