@@ -753,11 +753,10 @@ setTimeout(() => onClose(), 900);
   <img src="/assets/eduvia-logo.png" alt="Eduvia" />
 
   <h2>
-    {mode === 'signup'
+    {mode==='signup'
       ? 'Create your student account.'
       : 'Welcome back.'}
   </h2>
-
   <p className="login-sub">
     Save your profile once and keep your study-abroad journey connected.
   </p>
@@ -884,7 +883,7 @@ setTimeout(() => onClose(), 900);
           </div>
         )}
 
-        <small className="login-note">
+               <small className="login-note">
           By continuing, you agree to use Eduvia for study-abroad discovery and qualification.
         </small>
 
