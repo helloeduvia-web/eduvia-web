@@ -706,68 +706,42 @@ setTimeout(() => onClose(), 900);
           password:form.password
         });
 
-        if(error) throw error;
-
-        if(data.user){
-          const {data:profile}=await supabase
-            .from('students')
-            .select('full_name')
-            .eq('auth_user_id',data.user.id)
-            .maybeSingle();
-
-          onStudentName?.(
-            profile?.full_name ||
-            data.user.user_metadata?.full_name ||
-            'Student'
-          );
-        }
-
-        setMessage('Welcome back to Eduvia.');
-setTimeout(() => onClose(), 900);
-      }
-    }catch(err){
-      setMessage(err?.message || 'Unable to continue.');
-    }finally{
-      setSaving(false);
-    }
-  };
-
-  return (
+       return (
+  <div
+    className="modal-backdrop"
+    onMouseDown={e => {
+      if (e.target === e.currentTarget) onClose();
+    }}
+  >
     <div
-      className="modal-backdrop"
-      onMouseDown={e=>{
-        if(e.target===e.currentTarget) onClose();
+      className="login-modal"
+      style={{
+        width: "min(520px, calc(100vw - 32px))",
+        maxHeight: "90vh",
+        overflowY: "auto",
+        boxSizing: "border-box"
       }}
     >
-    <div
-  className="login-modal"
-  style={{
-    width: 'min(520px, calc(100vw - 32px))',
-    maxHeight: '90vh',
-    overflowY: 'auto',
-    boxSizing: 'border-box'
-  }}
->
+      <div className="login-logo">
+        <img src="/assets/eduvia-logo.png" alt="Eduvia" />
 
- <div className="login-logo">
-  <img src="/assets/eduvia-logo.png" alt="Eduvia" />
+        <h2>
+          {mode === "signup"
+            ? "Create your student account."
+            : "Welcome back."}
+        </h2>
 
-  <h2>
-    {mode==='signup'
-      ? 'Create your student account.'
-      : 'Welcome back.'}
-  </h2>
-  <p className="login-sub">
-    Save your profile once and keep your study-abroad journey connected.
-  </p>
+        <p className="login-sub">
+          Save your profile once and keep your study-abroad journey connected.
+        </p>
 
         <div className="login-tabs">
           <button
             type="button"
-            className={mode==='signup'?'active':''}
-            onClick={()=>{
-              setMode('signup');
-              setMessage('');
+            className={mode === "signup" ? "active" : ""}
+            onClick={() => {
+              setMode("signup");
+              setMessage("");
             }}
           >
             Sign up
@@ -775,10 +749,10 @@ setTimeout(() => onClose(), 900);
 
           <button
             type="button"
-            className={mode==='login'?'active':''}
-            onClick={()=>{
-              setMode('login');
-              setMessage('');
+            className={mode === "login" ? "active" : ""}
+            onClick={() => {
+              setMode("login");
+              setMessage("");
             }}
           >
             Login
@@ -787,12 +761,12 @@ setTimeout(() => onClose(), 900);
 
         <form onSubmit={submit}>
 
-          {mode==='signup' && (
+          {mode === "signup" && (
             <label>
               Full name
               <input
                 value={form.name}
-                onChange={e=>update('name',e.target.value)}
+                onChange={e => update("name", e.target.value)}
                 placeholder="Your full name"
                 required
               />
@@ -804,56 +778,58 @@ setTimeout(() => onClose(), 900);
             <input
               type="email"
               value={form.email}
-              onChange={e=>update('email',e.target.value)}
+              onChange={e => update("email", e.target.value)}
               placeholder="you@example.com"
               required
             />
           </label>
-{mode === 'signup' && (
-  <label>
-    Mobile number
-    <input
-      type="tel"
-      value={form.phone}
-      onChange={e =>
-        update(
-          'phone',
-          e.target.value.replace(/\D/g, '').slice(0, 10)
-        )
-      }
-      placeholder="10-digit mobile number"
-      minLength="10"
-      maxLength="10"
-      required
-    />
-  </label>
-)}
-          
-{mode==='signup' && otpSent && (
-  <label>
-    OTP
-    <input
-      type="text"
-      inputMode="numeric"
-      value={otp}
-      onChange={e=>
-        setOtp(e.target.value.replace(/\D/g,'').slice(0,6))
-      }
-      placeholder="Enter 6-digit OTP"
-      minLength="6"
-      maxLength="6"
-      required
-    />
-  </label>
-)} 
-          
+
+          {mode === "signup" && (
+            <label>
+              Mobile number
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e =>
+                  update(
+                    "phone",
+                    e.target.value.replace(/\D/g, "").slice(0, 10)
+                  )
+                }
+                placeholder="10-digit mobile number"
+                minLength="10"
+                maxLength="10"
+                required
+              />
+            </label>
+          )}
+
+          {mode === "signup" && otpSent && (
+            <label>
+              OTP
+              <input
+                type="text"
+                inputMode="numeric"
+                value={otp}
+                onChange={e =>
+                  setOtp(
+                    e.target.value.replace(/\D/g, "").slice(0, 6)
+                  )
+                }
+                placeholder="Enter 6-digit OTP"
+                minLength="6"
+                maxLength="6"
+                required
+              />
+            </label>
+          )}
 
           <label>
             Password
             <input
               type="password"
               value={form.password}
-              onChange={e=>update('password',e.target.value)}
+              onChange={e => update("password", e.target.value)}
               placeholder="Minimum 6 characters"
               minLength="6"
               required
@@ -865,14 +841,14 @@ setTimeout(() => onClose(), 900);
             type="submit"
             disabled={saving}
           >
-           {saving
-  ? 'Please wait…'
-  : mode==='signup'
-    ? otpSent
-      ? 'Verify OTP'
-      : 'Send OTP'
-    : 'Login to Eduvia'}
-            <Icon name="arrow"/>
+            {saving
+              ? "Please wait…"
+              : mode === "signup"
+              ? otpSent
+                ? "Verify OTP"
+                : "Send OTP"
+              : "Login to Eduvia"}
+            <Icon name="arrow" />
           </button>
 
         </form>
@@ -883,15 +859,14 @@ setTimeout(() => onClose(), 900);
           </div>
         )}
 
-               <small className="login-note">
+        <small className="login-note">
           By continuing, you agree to use Eduvia for study-abroad discovery and qualification.
         </small>
 
       </div>
     </div>
-  );
-}
-
+  </div>
+);
 function Result({answers,onClose}){
   const [unlocked,setUnlocked]=useState(false);
   const [processing,setProcessing]=useState(false);
