@@ -749,17 +749,18 @@ setTimeout(() => onClose(), 900);
   }}
 >
 
-  <div className="login-logo">
+ <div className="login-logo">
+  <img src="/assets/eduvia-logo.png" alt="Eduvia" />
 
-        <h2>
-          {mode==='signup'
-            ? 'Create your student account.'
-            : 'Welcome back.'}
-        </h2>
+  <h2>
+    {mode === 'signup'
+      ? 'Create your student account.'
+      : 'Welcome back.'}
+  </h2>
 
-        <p className="login-sub">
-          Save your profile once and keep your study-abroad journey connected.
-        </p>
+  <p className="login-sub">
+    Save your profile once and keep your study-abroad journey connected.
+  </p>
 
         <div className="login-tabs">
           <button
@@ -809,26 +810,25 @@ setTimeout(() => onClose(), 900);
               required
             />
           </label>
-
-          {mode==='signup' && (
-            <label>
-              Mobile number
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={e=>
-                  update(
-                    'phone',
-                    e.target.value.replace(/\D/g,'').slice(0,10)
-                  )
-                }
-                placeholder="10-digit mobile number"
-                minLength="10"
-                maxLength="10"
-                required
-              />
-            </label>
-          )} 
+{mode === 'signup' && (
+  <label>
+    Mobile number
+    <input
+      type="tel"
+      value={form.phone}
+      onChange={e =>
+        update(
+          'phone',
+          e.target.value.replace(/\D/g, '').slice(0, 10)
+        )
+      }
+      placeholder="10-digit mobile number"
+      minLength="10"
+      maxLength="10"
+      required
+    />
+  </label>
+)}
           
 {mode==='signup' && otpSent && (
   <label>
